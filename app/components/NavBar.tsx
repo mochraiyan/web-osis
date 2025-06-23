@@ -1,6 +1,5 @@
 "use client";
 
-import { NavigationMenu, NavigationMenuContent, NavigationMenuIndicator, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger, NavigationMenuViewport } from "@/components/ui/navigation-menu";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -9,7 +8,7 @@ function NavBar() {
   const pathname = usePathname();
 
   const isActive = (href: string) => {
-    if (href === '/') return pathname === href;
+    if (href === "/") return pathname === href;
     return pathname?.startsWith(href);
   };
 
@@ -44,66 +43,171 @@ function NavBar() {
             </p>
           </div>
         </div>
-        <div className="flex items-center justify-center">
-          <NavigationMenu>
-            <NavigationMenuList className="flex justify-center lg:justify-center lg:flex-row flex-col items-center gap-3 sm:gap-4 lg:gap-6">
-              <NavigationMenuItem>
-                <Link 
-                  href="/" 
-                  className={`relative hover:text-white transition-colors text-lg ${isActive('/') ? 'text-white' : ''}`}
-                >
-                  Home
-                  {isActive('/') && (
-                    <span className="absolute left-0 bottom-[-10] w-full h-0.5 bg-white animate-underline"></span>
-                  )}
-                </Link>
-              </NavigationMenuItem>
-              <NavigationMenuItem>
-                <Link 
-                  href="/about" 
-                  className={`relative hover:text-white transition-colors text-lg ${isActive('/about') ? 'text-white' : ''}`}
-                >
-                  About Us
-                  {isActive('/about') && (
-                    <span className="absolute left-0 bottom-[-10] w-full h-0.5 bg-white animate-underline"></span>
-                  )}
-                </Link>
-              </NavigationMenuItem>
-              <NavigationMenuItem>
-                <Link
-                  href="/program"
-                  className={`relative hover:text-white transition-colors whitespace-nowrap text-lg ${isActive('/program') ? 'text-white' : ''}`}
-                >
-                  Program Kerja
-                  {isActive('/program') && (
-                    <span className="absolute left-0 bottom-[-10] w-full h-0.5 bg-white animate-underline"></span>
-                  )}
-                </Link>
-              </NavigationMenuItem>
-              <NavigationMenuItem>
-                <Link
-                  href="/struktur"
-                  className={`relative hover:text-white transition-colors whitespace-nowrap text-lg ${isActive('/struktur') ? 'text-white' : ''}`}
-                >
-                  Struktur Organisasi
-                  {isActive('/struktur') && (
-                    <span className="absolute left-0 bottom-[-10] w-full h-0.5 bg-white animate-underline"></span>
-                  )}
-                </Link>
-              </NavigationMenuItem>
-              <NavigationMenuItem>
-                <Link 
-                  href="/sekbid" 
-                  className={`relative hover:text-white transition-colors text-lg ${isActive('/sekbid') ? 'text-white' : ''}`}
-                >
-                  Sekbid
-                  {isActive('/sekbid') && (
-                    <span className="absolute left-0 bottom-[-10] w-full h-0.5 bg-white animate-underline"></span>
-                  )}
-                </Link>
-              </NavigationMenuItem>
-            </NavigationMenuList>
-          </NavigationMenu>
+
+        <div className="w-full lg:w-auto">
+          <ul className="flex flex-wrap justify-center lg:justify-end lg:flex-row flex-col items-center gap-3 sm:gap-4 lg:gap-6">
+            <li>
+              <Link
+                href="/"
+                className={`
+                  relative 
+                  pb-1
+                  hover:text-white 
+                  transition-colors 
+                  text-lg 
+                  ${isActive("/") ? "text-white" : "text-white/60"}
+                  group
+                `}
+              >
+                Home
+                <span
+                  className={`
+                    absolute 
+                    left-0 
+                    bottom-[-10] 
+                    w-full 
+                    h-0.5 
+                    bg-white 
+                    ${isActive("/") ? "scale-x-100" : "scale-x-0"}
+                    group-hover:scale-x-100
+                    transition-transform
+                    duration-300
+                    origin-left
+                  `}
+                ></span>
+              </Link>
+            </li>
+
+            <li>
+              <Link
+                href="/about"
+                className={`
+                  relative 
+                  pb-1
+                  hover:text-white 
+                  transition-colors 
+                  text-lg 
+                  ${isActive("/about") ? "text-white" : "text-white/60"}
+                  group
+                `}
+              >
+                About Us
+                <span
+                  className={`
+                    absolute 
+                    left-0 
+                    bottom-[-10]
+                    w-full 
+                    h-0.5 
+                    bg-white 
+                    ${isActive("/about") ? "scale-x-100" : "scale-x-0"}
+                    group-hover:scale-x-100
+                    transition-transform
+                    duration-300
+                    origin-left
+                  `}
+                ></span>
+              </Link>
+            </li>
+
+            <li>
+              <Link
+                href="/program"
+                className={`
+                  relative 
+                  pb-1
+                  hover:text-white 
+                  transition-colors 
+                  whitespace-nowrap 
+                  text-lg 
+                  ${isActive("/program") ? "text-white" : "text-white/60"}
+                  group
+                `}
+              >
+                Program Kerja
+                <span
+                  className={`
+                    absolute 
+                    left-0 
+                    bottom-[-10]
+                    w-full 
+                    h-0.5 
+                    bg-white 
+                    ${isActive("/program") ? "scale-x-100" : "scale-x-0"}
+                    group-hover:scale-x-100
+                    transition-transform
+                    duration-300
+                    origin-left
+                  `}
+                ></span>
+              </Link>
+            </li>
+
+            <li>
+              <Link
+                href="/struktur"
+                className={`
+                  relative 
+                  pb-1
+                  hover:text-white 
+                  transition-colors 
+                  whitespace-nowrap 
+                  text-lg 
+                  ${isActive("/struktur") ? "text-white" : "text-white/60"}
+                  group
+                `}
+              >
+                Struktur Organisasi
+                <span
+                  className={`
+                    absolute 
+                    left-0 
+                    bottom-[-10]
+                    w-full 
+                    h-0.5 
+                    bg-white 
+                    ${isActive("/struktur") ? "scale-x-100" : "scale-x-0"}
+                    group-hover:scale-x-100
+                    transition-transform
+                    duration-300
+                    origin-left
+                  `}
+                ></span>
+              </Link>
+            </li>
+
+            <li>
+              <Link
+                href="/sekbid"
+                className={`
+                  relative 
+                  pb-1
+                  hover:text-white 
+                  transition-colors 
+                  text-lg 
+                  ${isActive("/sekbid") ? "text-white" : "text-white/60"}
+                  group
+                `}
+              >
+                Sekbid
+                <span
+                  className={`
+                    absolute 
+                    left-0 
+                    bottom-[-10]
+                    w-full 
+                    h-0.5 
+                    bg-white 
+                    ${isActive("/sekbid") ? "scale-x-100" : "scale-x-0"}
+                    group-hover:scale-x-100
+                    transition-transform
+                    duration-300
+                    origin-left
+                  `}
+                ></span>
+              </Link>
+            </li>
+          </ul>
         </div>
       </nav>
     </header>
