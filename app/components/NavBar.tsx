@@ -1,220 +1,238 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Menu, X, ChevronDown } from "lucide-react";
 
 function NavBar() {
   const pathname = usePathname();
+  // State for the main mobile menu (sidebar)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  // SEPARATE state for the accordion dropdown on mobile ONLY
+  const [isMobileSekbidOpen, setIsMobileSekbidOpen] = useState(false);
+
+  // Close mobile menu on route change
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      closeMobileMenu();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pathname]);
+
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [isMobileMenuOpen]);
 
   const isActive = (href: string) => {
+    // Exact match for homepage
     if (href === "/") return pathname === href;
+    // StartsWith for parent paths like /about, /program, /sekbid
     return pathname?.startsWith(href);
   };
 
+  const closeMobileMenu = () => {
+    setIsMobileMenuOpen(false);
+    setIsMobileSekbidOpen(false); // Also close the accordion
+  };
+
+  const navLinks = [
+    { href: "/", label: "Home", scroll: true },
+    { href: "/about", label: "About Us" },
+    { href: "/program", label: "Program Kerja" },
+    { href: "/struktur", label: "Struktur Organisasi" },
+  ];
+
+  const sekbidLinks = [
+    { href: "inti-osis", label: "INTIOSIS" }, // Note: no leading slash
+    ...Array.from({ length: 10 }).map((_, i) => ({
+      href: `${i + 1}`, // Note: no leading slash
+      label: `BIDANG ${i + 1}`,
+    })),
+  ];
+
   return (
-    <header className="p-1 md:p-3 backdrop-blur-2xl text-white shadow-xl/30">
-      <nav className="flex flex-col lg:flex-row gap-4 lg:gap-6 justify-between lg:justify-evenly m-2 items-center">
-        <div className="flex gap-3 items-center justify-center">
-          <div>
-            <Image
-              src={"/smkn2singosari.png"}
-              alt="logo-smk"
-              width={50}
-              height={50}
-              className="w-8 h-8 sm:w-10 sm:h-10 lg:w-[50px] lg:h-[50px]"
-            />
-          </div>
-          <div>
-            <Image
-              src={"/logo-osis.png"}
-              alt="logo-osis"
-              width={40}
-              height={45}
-              className="w-6 h-6 sm:w-8 sm:h-8 lg:w-[40px] lg:h-[45px]"
-            />
-          </div>
-          <div className="text-center lg:text-left">
-            <h1 className="font-bold text-sm sm:text-lg lg:text-xl">
-              Askara Anagata
-            </h1>
-            <p className="font-light text-xs sm:text-sm hidden lg:block">
-              OFFICIAL WEBSITE OSIS SMKN 2 SINGOSARI
+    <header className="backdrop-blur-3xl text-white shadow-lg">
+      <nav className="flex justify-between items-center max-w-7xl mx-auto px-4 py-2">
+        {/* Logo and Title Section */}
+        <Link href="/" className="flex gap-3 items-center" onClick={closeMobileMenu}>
+          <Image
+            src={"/smkn2singosari.png"}
+            alt="logo-smk"
+            width={50}
+            height={50}
+            className="w-8 h-8 sm:w-10 sm:h-10"
+          />
+          <Image
+            src={"/logo-osis.png"}
+            alt="logo-osis"
+            width={40}
+            height={45}
+            className="w-6 h-6 sm:w-8 sm:h-8"
+          />
+          <div className="text-left">
+            <h1 className="font-bold text-sm sm:text-lg">Askara Anagata</h1>
+            <p className="font-light text-xs hidden sm:block">
+              OSIS SMKN 2 SINGOSARI
             </p>
+          </div>
+        </Link>
+
+        {/* Desktop Navigation (Hidden on mobile) */}
+        <div className="hidden lg:flex items-center gap-6">
+          <ul className="flex items-center gap-6">
+            {navLinks.map((link) => (
+              <li key={link.href}>
+                <Link
+                  href={link.href}
+                  scroll={link.scroll}
+                  className={`relative pb-1 hover:text-white transition-colors text-base ${
+                    isActive(link.href) ? "text-white font-semibold" : "text-white/70"
+                  } group`}
+                >
+                  {link.label}
+                  <span
+                    className={`absolute left-0 bottom-[-5px] w-full h-0.5 bg-white transition-transform duration-300 origin-center ${
+                      isActive(link.href) ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
+                    }`}
+                  ></span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+          {/* Desktop Sekbid Dropdown (CSS-driven) */}
+          <div className="relative group">
+            <button
+              className={`relative pb-1 hover:text-white transition-colors text-base flex items-center gap-1 ${
+                isActive("/sekbid") ? "text-white font-semibold" : "text-white/70"
+              }`}
+            >
+              Sekbid
+              <ChevronDown className="w-4 h-4 transition-transform group-hover:rotate-180" />
+              <span
+                className={`absolute left-0 bottom-[-5px] w-full h-0.5 bg-white transition-transform duration-300 origin-center ${
+                  isActive("/sekbid") ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
+                }`}
+              ></span>
+            </button>
+            <div
+              className="absolute left-1/2 -translate-x-1/2 top-full mt-3 w-48 bg-gray-800 rounded-md shadow-xl overflow-hidden transition-all duration-300 ease-in-out opacity-0 scale-95 pointer-events-none group-hover:opacity-100 group-hover:scale-100 group-hover:pointer-events-auto"
+            >
+              <ul className="p-2">
+                {sekbidLinks.map((link) => (
+                  <li key={link.href}>
+                    <Link
+                      href={`/sekbid/${link.href}`}
+                      className={`block w-full text-left px-4 py-2 rounded-md text-sm whitespace-nowrap transition-colors ${
+                        isActive(`/sekbid/${link.href}`)
+                          ? "bg-white/20 text-white"
+                          : "text-white/80 hover:bg-white/10 hover:text-white"
+                      }`}
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         </div>
 
-        <div className="w-full lg:w-auto">
-          <ul className="flex flex-wrap justify-center lg:justify-end lg:flex-row flex-col items-center gap-3 sm:gap-4 lg:gap-6">
-            <li>
-              <Link
-                href="/"
-                scroll
-                className={`
-                  relative 
-                  pb-1
-                  hover:text-white 
-                  transition-colors 
-                  text-lg 
-                  ${isActive("/") ? "text-white" : "text-white/60"}
-                  group
-                `}
-              >
-                Home
-                <span
-                  className={`
-                    absolute 
-                    left-0 
-                    bottom-[-10] 
-                    w-full 
-                    h-0.5 
-                    bg-white 
-                    ${isActive("/") ? "scale-x-100" : "scale-x-0"}
-                    group-hover:scale-x-100
-                    transition-transform
-                    duration-300
-                    origin-left
-                  `}
-                ></span>
-              </Link>
-            </li>
+        {/* Mobile Menu Button (Visible on mobile) */}
+        <div className="lg:hidden">
+          <button onClick={() => setIsMobileMenuOpen(true)} aria-label="Open menu">
+            <Menu className="w-8 h-8" />
+          </button>
+        </div>
+      </nav>
 
-            <li>
-              <Link
-                href="/about"
-                scroll={false}
-                className={`
-                  relative 
-                  pb-1
-                  hover:text-white 
-                  transition-colors 
-                  text-lg 
-                  ${isActive("/about") ? "text-white" : "text-white/60"}
-                  group
-                `}
-              >
-                About Us
-                <span
-                  className={`
-                    absolute 
-                    left-0 
-                    bottom-[-10]
-                    w-full 
-                    h-0.5 
-                    bg-white 
-                    ${isActive("/about") ? "scale-x-100" : "scale-x-0"}
-                    group-hover:scale-x-100
-                    transition-transform
-                    duration-300
-                    origin-left
-                  `}
-                ></span>
-              </Link>
-            </li>
+      {/* Mobile Menu Sidebar (Overlay) */}
+      <div
+        className={`fixed inset-0 z-50 transition-opacity duration-300 ease-in-out lg:hidden ${
+          isMobileMenuOpen ? "opacity-100" : "opacity-0 pointer-events-none"
+        }`}
+      >
+        {/* Backdrop */}
+        <div className="absolute inset-0 bg-black/60" onClick={closeMobileMenu}></div>
 
+        {/* Menu Content */}
+        <div
+          className={`absolute top-0 right-0 h-full w-4/5 max-w-xs bg-gray-900 shadow-2xl transition-transform duration-300 ease-in-out ${
+            isMobileMenuOpen ? "translate-x-0" : "translate-x-full"
+          }`}
+        >
+          <div className="flex justify-between items-center p-4">
+            <h2 className="font-bold text-lg">Menu</h2>
+            <button onClick={closeMobileMenu} aria-label="Close menu">
+              <X className="w-8 h-8 text-white" />
+            </button>
+          </div>
+          <ul className="bg-gray-800 p-4 space-y-2">
+            {navLinks.map((link) => (
+              <li key={`mobile-${link.href}`}>
+                <Link
+                  href={link.href}
+                  // UPDATED: Changed text-lg to text-base and py-3 to py-2 for a more compact feel
+                  className={`block text-base py-2 px-3 rounded-md transition-colors ${
+                    isActive(link.href)
+                      ? "bg-white/10 text-white font-semibold"
+                      : "text-white/70 hover:bg-white/5"
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              </li>
+            ))}
+            {/* Mobile Sekbid Accordion (JS-driven) */}
             <li>
-              <Link
-                href="/program"
-                scroll={false}
-                className={`
-                  relative 
-                  pb-1
-                  hover:text-white 
-                  transition-colors 
-                  whitespace-nowrap 
-                  text-lg 
-                  ${isActive("/program") ? "text-white" : "text-white/60"}
-                  group
-                `}
+              <button
+                onClick={() => setIsMobileSekbidOpen(!isMobileSekbidOpen)}
+                // UPDATED: Changed text-lg to text-base and py-3 to py-2 for consistency
+                className={`w-full flex justify-between items-center text-base py-2 px-3 rounded-md transition-colors ${
+                  isActive("/sekbid")
+                    ? "bg-white/10 text-white font-semibold"
+                    : "text-white/70 hover:bg-white/5"
+                }`}
               >
-                Program Kerja
-                <span
-                  className={`
-                    absolute 
-                    left-0 
-                    bottom-[-10]
-                    w-full 
-                    h-0.5 
-                    bg-white 
-                    ${isActive("/program") ? "scale-x-100" : "scale-x-0"}
-                    group-hover:scale-x-100
-                    transition-transform
-                    duration-300
-                    origin-left
-                  `}
-                ></span>
-              </Link>
-            </li>
-
-            <li>
-              <Link
-                href="/struktur"
-                scroll={false}
-                className={`
-                  relative 
-                  pb-1
-                  hover:text-white 
-                  transition-colors 
-                  whitespace-nowrap 
-                  text-lg 
-                  ${isActive("/struktur") ? "text-white" : "text-white/60"}
-                  group
-                `}
-              >
-                Struktur Organisasi
-                <span
-                  className={`
-                    absolute 
-                    left-0 
-                    bottom-[-10]
-                    w-full 
-                    h-0.5 
-                    bg-white 
-                    ${isActive("/struktur") ? "scale-x-100" : "scale-x-0"}
-                    group-hover:scale-x-100
-                    transition-transform
-                    duration-300
-                    origin-left
-                  `}
-                ></span>
-              </Link>
-            </li>
-
-            <li>
-              <Link
-                href="/sekbid"
-                scroll={false}
-                className={`
-                  relative 
-                  pb-1
-                  hover:text-white 
-                  transition-colors 
-                  text-lg 
-                  ${isActive("/sekbid") ? "text-white" : "text-white/60"}
-                  group
-                `}
-              >
-                Sekbid
-                <span
-                  className={`
-                    absolute 
-                    left-0 
-                    bottom-[-10]
-                    w-full 
-                    h-0.5 
-                    bg-white 
-                    ${isActive("/sekbid") ? "scale-x-100" : "scale-x-0"}
-                    group-hover:scale-x-100
-                    transition-transform
-                    duration-300
-                    origin-left
-                  `}
-                ></span>
-              </Link>
+                <span>Sekbid</span>
+                <ChevronDown
+                  className={`w-5 h-5 transition-transform duration-300 ${
+                    isMobileSekbidOpen ? "rotate-180" : ""
+                  }`}
+                />
+              </button>
+              {isMobileSekbidOpen && (
+                <ul className="pl-4 mt-2 space-y-1 border-l-2 border-gray-700">
+                  {sekbidLinks.map((link) => (
+                    <li key={`mobile-sekbid-${link.href}`}>
+                      <Link
+                        href={`/sekbid/${link.href}`}
+                        // UPDATED: Changed text-base to text-sm to create visual hierarchy
+                        className={`block text-sm py-2 px-4 rounded-md transition-colors ${
+                          isActive(`/sekbid/${link.href}`)
+                            ? "text-white font-semibold"
+                            : "text-white/60 hover:text-white"
+                        }`}
+                      >
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </li>
           </ul>
         </div>
-      </nav>
+      </div>
     </header>
   );
 }

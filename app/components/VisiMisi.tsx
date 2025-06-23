@@ -3,7 +3,7 @@ import SlideFadeInMotion from "./SlideInMotion"
 export default function VisiMisi() {
     return (
         
-        <div className="flex items-center justify-center text-center gap-4 flex-col pt-[100px] lg:pt-[150px] text-black px-4">
+        <div className="flex items-center justify-center text-center gap-4 flex-col pt-[100px] lg:pt-[100px] text-black px-4">
             <SlideFadeInMotion delay={0.2} duration={1}>
             <h1 className="font-bold text-2xl sm:text-3xl lg:text-7xl mb-2">
                 VISI DAN MISI

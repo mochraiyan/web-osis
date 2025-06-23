@@ -44,6 +44,61 @@ export const headerConfigMap: { [key: string]: HeaderConfig } = {
     curved: false,
     children: <HomePage />,
   },
+  "/sekbid/inti-osis": {
+    imgPath: "/sekolah.jpeg",
+    curved: false,
+    children: <HomePage />,
+  },
+  "/sekbid/sekbid1": {
+    imgPath: "/sekolah.jpeg",
+    curved: false,
+    children: <HomePage />,
+  },
+  "/sekbid/sekbid2": {
+    imgPath: "/sekolah.jpeg",
+    curved: false,
+    children: <HomePage />,   
+  },
+  "/sekbid/sekbid3": {
+    imgPath: "/sekolah.jpeg",
+    curved: false,
+    children: <HomePage />,
+  },
+  "/sekbid/sekbid4": {
+    imgPath: "/sekolah.jpeg",
+    curved: false,
+    children: <HomePage />,
+  },
+  "/sekbid/sekbid5": {
+    imgPath: "/sekolah.jpeg",
+    curved: false,
+    children: <HomePage />,
+  },
+  "/sekbid/sekbid6": {
+    imgPath: "/sekolah.jpeg",
+    curved: false,
+    children: <HomePage />,
+  },
+  "/sekbid/sekbid7": {
+    imgPath: "/sekolah.jpeg",
+    curved: false,
+    children: <HomePage />,
+  },
+  "/sekbid/sekbid8": {
+    imgPath: "/sekolah.jpeg",
+    curved: false,
+    children: <HomePage />,
+  },
+  "/sekbid/sekbid9": {  
+    imgPath: "/sekolah.jpeg",
+    curved: false,
+    children: <HomePage />,
+  },
+  "/sekbid/sekbid10": {
+    imgPath: "/sekolah.jpeg",
+    curved: false,
+    children: <HomePage />,
+  },
 };
 
 export default function Header() {
