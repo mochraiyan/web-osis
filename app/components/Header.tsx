@@ -21,7 +21,7 @@ const defaultConfig: HeaderConfig = {
 export const headerConfigMap: { [key: string]: HeaderConfig } = {
   "/": {
     imgPath: "/background.jpeg",
-    curved: true,
+    curved: false,
     children: <HomePage />,
   },
   "/about": {
@@ -103,7 +103,8 @@ export const headerConfigMap: { [key: string]: HeaderConfig } = {
 
 export default function Header() {
   const pathName = usePathname();
-  const config = headerConfigMap[pathName] || defaultConfig;
+  // A safer way to handle potential undefined paths, especially during build
+  const config = headerConfigMap[pathName] || headerConfigMap["/"] || defaultConfig;
 
   const headerStyle = {
     backgroundImage: `url(${config.imgPath})`,
@@ -113,9 +114,13 @@ export default function Header() {
 
   return (
     <>
+      {/*
+        --- THE FIX IS ON THIS LINE ---
+        Added `relative` for better stacking context and `overflow-x-hidden` to prevent horizontal scrolling.
+      */}
       <div
         style={headerStyle}
-        className={`${curveClass} z-10 bg-cover bg-center lg:bg-bottom min-h-screen w-full shadow-2xl rounded-none sm:rounded-b-2xl lg:rounded-b-4xl lg:rounded-bl-4xl`}
+        className={`${curveClass} relative z-10 bg-cover bg-center lg:bg-bottom min-h-screen w-full shadow-2xl rounded-none sm:rounded-b-2xl lg:rounded-b-4xl lg:rounded-bl-4xl overflow-x-hidden`}
       >
         <NavBar />
         {config.children}

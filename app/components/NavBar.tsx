@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -8,20 +8,42 @@ import { Menu, X, ChevronDown } from "lucide-react";
 
 function NavBar() {
   const pathname = usePathname();
-  // State for the main mobile menu (sidebar)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  // SEPARATE state for the accordion dropdown on mobile ONLY
   const [isMobileSekbidOpen, setIsMobileSekbidOpen] = useState(false);
+  
+  // State and ref for the desktop dropdown menu
+  const [isDesktopSekbidOpen, setIsDesktopSekbidOpen] = useState(false);
+  const desktopDropdownRef = useRef<HTMLDivElement>(null);
 
-  // Close mobile menu on route change
+  // Close mobile menu and desktop dropdown on route change
   useEffect(() => {
     if (isMobileMenuOpen) {
       closeMobileMenu();
     }
+    // Also close the desktop dropdown when navigating
+    if (isDesktopSekbidOpen) {
+      setIsDesktopSekbidOpen(false);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 
-  // Lock body scroll when mobile menu is open
+  // Effect to handle clicks outside of the desktop dropdown to close it
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (desktopDropdownRef.current && !desktopDropdownRef.current.contains(event.target as Node)) {
+        setIsDesktopSekbidOpen(false);
+      }
+    }
+    // Add event listener when the component mounts
+    document.addEventListener("mousedown", handleClickOutside);
+    // Cleanup the event listener when the component unmounts
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [desktopDropdownRef]);
+
+
+  // --- START OF FIX --- (This is your original, correct body scroll lock)
   useEffect(() => {
     if (isMobileMenuOpen) {
       document.body.style.overflow = "hidden";
@@ -32,11 +54,11 @@ function NavBar() {
       document.body.style.overflow = "auto";
     };
   }, [isMobileMenuOpen]);
+  // --- END OF FIX ---
+
 
   const isActive = (href: string) => {
-    // Exact match for homepage
     if (href === "/") return pathname === href;
-    // StartsWith for parent paths like /about, /program, /sekbid
     return pathname?.startsWith(href);
   };
 
@@ -53,9 +75,9 @@ function NavBar() {
   ];
 
   const sekbidLinks = [
-    { href: "inti-osis", label: "INTIOSIS" }, // Note: no leading slash
+    { href: "inti-osis", label: "INTIOSIS" },
     ...Array.from({ length: 10 }).map((_, i) => ({
-      href: `${i + 1}`, // Note: no leading slash
+      href: `${i + 1}`,
       label: `BIDANG ${i + 1}`,
     })),
   ];
@@ -109,23 +131,37 @@ function NavBar() {
               </li>
             ))}
           </ul>
-          {/* Desktop Sekbid Dropdown (CSS-driven) */}
-          <div className="relative group">
+          {/* Desktop Sekbid Dropdown (State-driven for hover and click) */}
+          <div
+            className="relative"
+            ref={desktopDropdownRef}
+            onMouseEnter={() => setIsDesktopSekbidOpen(true)}
+          >
             <button
+              onClick={() => setIsDesktopSekbidOpen((prev) => !prev)}
               className={`relative pb-1 hover:text-white transition-colors text-base flex items-center gap-1 ${
                 isActive("/sekbid") ? "text-white font-semibold" : "text-white/70"
               }`}
             >
               Sekbid
-              <ChevronDown className="w-4 h-4 transition-transform group-hover:rotate-180" />
+              <ChevronDown
+                className={`w-4 h-4 transition-transform duration-300 ${
+                  isDesktopSekbidOpen ? "rotate-180" : ""
+                }`}
+              />
               <span
                 className={`absolute left-0 bottom-[-5px] w-full h-0.5 bg-white transition-transform duration-300 origin-center ${
-                  isActive("/sekbid") ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
+                  isActive("/sekbid") || isDesktopSekbidOpen ? "scale-x-100" : "scale-x-0"
                 }`}
               ></span>
             </button>
             <div
-              className="absolute left-1/2 -translate-x-1/2 top-full mt-3 w-48 bg-gray-800 rounded-md shadow-xl overflow-hidden transition-all duration-300 ease-in-out opacity-0 scale-95 pointer-events-none group-hover:opacity-100 group-hover:scale-100 group-hover:pointer-events-auto"
+              onMouseLeave={() => setIsDesktopSekbidOpen(false)}
+              className={`absolute left-1/2 -translate-x-1/2 top-full mt-3 w-48 bg-gray-800 rounded-md shadow-xl overflow-hidden transition-all duration-300 ease-in-out ${
+                isDesktopSekbidOpen
+                  ? "opacity-100 scale-100 pointer-events-auto"
+                  : "opacity-0 scale-95 pointer-events-none"
+              }`}
             >
               <ul className="p-2">
                 {sekbidLinks.map((link) => (
@@ -156,7 +192,7 @@ function NavBar() {
       </nav>
 
       {/* Mobile Menu Sidebar (Overlay) */}
-      <div
+      <div 
         className={`fixed inset-0 z-50 transition-opacity duration-300 ease-in-out lg:hidden ${
           isMobileMenuOpen ? "opacity-100" : "opacity-0 pointer-events-none"
         }`}
@@ -169,6 +205,7 @@ function NavBar() {
           className={`absolute top-0 right-0 h-full w-4/5 max-w-xs bg-gray-900 shadow-2xl transition-transform duration-300 ease-in-out ${
             isMobileMenuOpen ? "translate-x-0" : "translate-x-full"
           }`}
+          style={{ maxWidth: 'calc(100vw - 3rem)' }}
         >
           <div className="flex justify-between items-center p-4">
             <h2 className="font-bold text-lg">Menu</h2>
@@ -180,11 +217,11 @@ function NavBar() {
             {navLinks.map((link) => (
               <li key={`mobile-${link.href}`}>
                 <Link
+                  scroll={false}
                   href={link.href}
-                  // UPDATED: Changed text-lg to text-base and py-3 to py-2 for a more compact feel
                   className={`block text-base py-2 px-3 rounded-md transition-colors ${
                     isActive(link.href)
-                      ? "bg-white/10 text-white font-semibold"
+                      ? "bg-white/10 text-white font-semibold border-b border-white"
                       : "text-white/70 hover:bg-white/5"
                   }`}
                 >
@@ -196,7 +233,6 @@ function NavBar() {
             <li>
               <button
                 onClick={() => setIsMobileSekbidOpen(!isMobileSekbidOpen)}
-                // UPDATED: Changed text-lg to text-base and py-3 to py-2 for consistency
                 className={`w-full flex justify-between items-center text-base py-2 px-3 rounded-md transition-colors ${
                   isActive("/sekbid")
                     ? "bg-white/10 text-white font-semibold"
@@ -215,8 +251,8 @@ function NavBar() {
                   {sekbidLinks.map((link) => (
                     <li key={`mobile-sekbid-${link.href}`}>
                       <Link
+                        scroll={false}
                         href={`/sekbid/${link.href}`}
-                        // UPDATED: Changed text-base to text-sm to create visual hierarchy
                         className={`block text-sm py-2 px-4 rounded-md transition-colors ${
                           isActive(`/sekbid/${link.href}`)
                             ? "text-white font-semibold"
