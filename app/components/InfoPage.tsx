@@ -2,7 +2,7 @@ export default function InfoPage() {
   return (
     <section
       id="info"
-      className="mt-40 lg:mt-[-100] bg-[url('/background-pix.jpeg')] items-center justify-center bg-cover bg-center h-screen flex flex-col p-10"
+      className="mt-40 lg:mt-[-130] bg-[url('/background-pix.jpeg')] items-center justify-center bg-cover bg-center h-screen flex flex-col p-10"
     >
       <div className="text-black text-left p-10 flex flex-col gap-20">
         <div className="text-center">

@@ -1,7 +1,7 @@
 export default function ProgramKerjaPage() {
   return (
     <>
-      <p>Program Kerja</p>
+      <p>Hello World</p>
     </>
   );
 }

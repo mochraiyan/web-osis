@@ -13,7 +13,7 @@ function NavBar() {
   };
 
   return (
-    <header className="p-1 md:p-3 backdrop-blur-lg text-white shadow-xl/30">
+    <header className="p-1 md:p-3 backdrop-blur-2xl text-white shadow-xl/30">
       <nav className="flex flex-col lg:flex-row gap-4 lg:gap-6 justify-between lg:justify-evenly m-2 items-center">
         <div className="flex gap-3 items-center justify-center">
           <div>

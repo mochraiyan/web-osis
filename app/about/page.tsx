@@ -1,9 +1,3 @@
-import HomePage from "../components/HomePage";
-
-export default function RootPage() {
-  return (
-    <>
-      <HomePage />
-    </>
-  );
+export default function AboutPage() {
+  return <></>;
 }
