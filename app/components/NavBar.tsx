@@ -49,6 +49,7 @@ function NavBar() {
             <li>
               <Link
                 href="/"
+                scroll
                 className={`
                   relative 
                   pb-1
@@ -81,6 +82,7 @@ function NavBar() {
             <li>
               <Link
                 href="/about"
+                scroll={false}
                 className={`
                   relative 
                   pb-1
@@ -113,6 +115,7 @@ function NavBar() {
             <li>
               <Link
                 href="/program"
+                scroll={false}
                 className={`
                   relative 
                   pb-1
@@ -146,6 +149,7 @@ function NavBar() {
             <li>
               <Link
                 href="/struktur"
+                scroll={false}
                 className={`
                   relative 
                   pb-1
@@ -179,6 +183,7 @@ function NavBar() {
             <li>
               <Link
                 href="/sekbid"
+                scroll={false}
                 className={`
                   relative 
                   pb-1

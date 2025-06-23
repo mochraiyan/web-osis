@@ -60,7 +60,7 @@ export default function Header() {
     <>
       <div
         style={headerStyle}
-        className={`${curveClass} bg-cover bg-center lg:bg-bottom min-h-screen w-full shadow-2xl rounded-none sm:rounded-b-2xl lg:rounded-b-4xl lg:rounded-bl-4xl`}
+        className={`${curveClass} z-10 bg-cover bg-center lg:bg-bottom min-h-screen w-full shadow-2xl rounded-none sm:rounded-b-2xl lg:rounded-b-4xl lg:rounded-bl-4xl`}
       >
         <NavBar />
         {config.children}
