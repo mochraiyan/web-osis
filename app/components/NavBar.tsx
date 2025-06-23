@@ -44,9 +44,9 @@ function NavBar() {
             </p>
           </div>
         </div>
-        <div className="w-full lg:w-auto">
+        <div className="flex items-center justify-center">
           <NavigationMenu>
-            <NavigationMenuList className="flex flex-wrap justify-center lg:justify-end lg:flex-row flex-col items-center gap-3 sm:gap-4 lg:gap-6">
+            <NavigationMenuList className="flex justify-center lg:justify-center lg:flex-row flex-col items-center gap-3 sm:gap-4 lg:gap-6">
               <NavigationMenuItem>
                 <Link 
                   href="/" 
@@ -61,44 +61,44 @@ function NavBar() {
               <NavigationMenuItem>
                 <Link 
                   href="/about" 
-                  className={`relative hover:text-black transition-colors text-lg ${isActive('/about') ? 'text-black' : ''}`}
+                  className={`relative hover:text-white transition-colors text-lg ${isActive('/about') ? 'text-white' : ''}`}
                 >
                   About Us
                   {isActive('/about') && (
-                    <span className="absolute left-0 bottom-[-10] w-full h-0.5 bg-black animate-underline"></span>
+                    <span className="absolute left-0 bottom-[-10] w-full h-0.5 bg-white animate-underline"></span>
                   )}
                 </Link>
               </NavigationMenuItem>
               <NavigationMenuItem>
                 <Link
                   href="/program"
-                  className={`relative hover:text-black transition-colors whitespace-nowrap text-lg ${isActive('/program') ? 'text-black' : ''}`}
+                  className={`relative hover:text-white transition-colors whitespace-nowrap text-lg ${isActive('/program') ? 'text-white' : ''}`}
                 >
                   Program Kerja
                   {isActive('/program') && (
-                    <span className="absolute left-0 bottom-0 w-full h-0.5 bg-black animate-underline"></span>
+                    <span className="absolute left-0 bottom-[-10] w-full h-0.5 bg-white animate-underline"></span>
                   )}
                 </Link>
               </NavigationMenuItem>
               <NavigationMenuItem>
                 <Link
                   href="/struktur"
-                  className={`relative hover:text-black transition-colors whitespace-nowrap text-lg ${isActive('/struktur') ? 'text-black' : ''}`}
+                  className={`relative hover:text-white transition-colors whitespace-nowrap text-lg ${isActive('/struktur') ? 'text-white' : ''}`}
                 >
                   Struktur Organisasi
                   {isActive('/struktur') && (
-                    <span className="absolute left-0 bottom-0 w-full h-0.5 bg-black animate-underline"></span>
+                    <span className="absolute left-0 bottom-[-10] w-full h-0.5 bg-white animate-underline"></span>
                   )}
                 </Link>
               </NavigationMenuItem>
               <NavigationMenuItem>
                 <Link 
                   href="/sekbid" 
-                  className={`relative hover:text-black transition-colors text-lg ${isActive('/sekbid') ? 'text-black' : ''}`}
+                  className={`relative hover:text-white transition-colors text-lg ${isActive('/sekbid') ? 'text-white' : ''}`}
                 >
                   Sekbid
                   {isActive('/sekbid') && (
-                    <span className="absolute left-0 bottom-0 w-full h-0.5 bg-black animate-underline"></span>
+                    <span className="absolute left-0 bottom-[-10] w-full h-0.5 bg-white animate-underline"></span>
                   )}
                 </Link>
               </NavigationMenuItem>
